@@ -4,27 +4,26 @@
 
 #include "map.h"
 
-int numcmp(void* a,void* b){
+static int numcmp(void* a,void* b){
     return *(int*)a-*(int*)b;
 }
 
-int mystrcmp(void* a,void* b){
+static int mystrcmp(void* a,void* b){
     return strcmp((const char*)a,(const char*)b);
 }
 
-treeMap* map_init(int (*cmp)(void* a,void* b)){
-    treeMap *m=(treeMap*) malloc(sizeof(treeMap));
+treeMap* map_init(treeMap *m, int (*cmp)(void* a,void* b)){
     m->root=RB_ROOT;
     m->cmp=cmp?cmp:mystrcmp;
     return m;
 }
 
-int map_insert(treeMap* treemap, void* key, void *value) {
+int map_insert(treeMap* treemap, struct map* node) {
     struct rb_root* root=&treemap->root;
     struct rb_node **_new = &(root->rb_node);
     struct rb_node *parent = NULL;
-    struct map *node;
-
+    void* key=node->key;
+    
     // 查找插入位置
     while (*_new) {
         struct map *_this = rb_entry(*_new, struct map, rb_node);
@@ -37,11 +36,6 @@ int map_insert(treeMap* treemap, void* key, void *value) {
         else
             return -1; // 键已存在
     }
-
-    // 创建新节点
-    node = (struct map*) malloc(sizeof(struct map));
-    node->key = key;
-    node->value = value;
 
     // 链接节点
     rb_link_node(&node->rb_node, parent, _new);

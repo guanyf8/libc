@@ -18,7 +18,7 @@ typedef struct tUnit{
 
 typedef tableUnit hashMap;
 
-hashMap* hashInit();
+hashMap* hashInit(hashMap *table);
 
 int hashInsert(hashMap * table,tableUnit unit) ;
 

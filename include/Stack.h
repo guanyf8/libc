@@ -3,7 +3,7 @@
 
 //顺序栈的结构与基本操作
 
-#define n 100
+#define stack_size 100
 
 typedef struct {
 	void** space;
@@ -11,7 +11,7 @@ typedef struct {
 	int t;
 } ArrStack;    //只存数字，即只存索引，需要协同element数组
 
-ArrStack *stackInit(int size);
+ArrStack *stackInit(ArrStack* ,int size);
 
 void *stackPop(ArrStack *st);
 

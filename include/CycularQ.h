@@ -14,7 +14,7 @@ typedef struct {
     void* *space;
 } Queue;
 
-Queue *QueueInit(int cap);
+Queue *QueueInit(Queue *,int cap);
 
 void QueueClose(Queue *que);
 
@@ -24,7 +24,7 @@ void* QueuePop(Queue *q);
 
 int QueueGetR(Queue *q);
 
-int QueuePush(Queue *q,void* val);
+void* QueuePush(Queue *q,void* val);
 
 #endif
 

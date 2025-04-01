@@ -13,8 +13,7 @@ static inline int H2(int key) {
     return ((key & 0b111111000000) >> 6) | 1;     //取中间6位并强制为1
 }
 
-hashMap* hashInit(){
-    hashMap * table=(hashMap*) malloc(sizeof(tableUnit)*tableSize);
+hashMap* hashInit(hashMap* table){
     int i;
     memset((void*)table,0xFF,tableSize*sizeof(tableUnit));
     return table;

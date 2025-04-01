@@ -20,7 +20,7 @@
   linux/lib/rbtree.c
 */
 
-#include "rbtree.h"
+#include "rbtree_concurrent.h"
 
 static void __rb_rotate_left(struct rb_node *node, struct rb_root *root)
 {

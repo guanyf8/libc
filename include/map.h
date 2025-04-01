@@ -22,13 +22,13 @@ typedef struct {
 
 typedef treeMap Map;
 
-int numcmp(void* a,void* b);
+// int numcmp(void* a,void* b);
 
-int mystrcmp(void* a,void* b);
+// int mystrcmp(void* a,void* b);
 
-treeMap* map_init(int (*cmp)(void* a,void* b));
+treeMap* map_init(treeMap* ,int (*cmp)(void* a,void* b));
 // 插入键值对
-int map_insert(treeMap* treemap, void* key, void *value) ;
+int map_insert(treeMap* treemap, struct map* node) ;
 
 // 查找键值对
 void *map_find(treeMap* treemap, void* key);

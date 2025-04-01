@@ -1,8 +1,8 @@
 #include "Stack.h"
 #include "stdio.h"
+#include "stdlib.h"
 
-ArrStack* stackInit(int size) {
-    ArrStack* st = (ArrStack*)malloc(sizeof(ArrStack));
+ArrStack* stackInit(ArrStack* st,int size) {
 	st->space = (void**)malloc(sizeof(void*) * size);
 	st->b = st->t = -1;
 }
@@ -18,7 +18,7 @@ void* stackPop(ArrStack* st) {
 }
 
 void* stackPush(ArrStack* stack, void* x) {
-	if (stack->t > n - 2) { 
+	if (stack->t > stack_size - 2) { 
 		printf("space out");
 		return NULL;
 	}

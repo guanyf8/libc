@@ -1,0 +1,4 @@
+D:/GitHub/libc/build/CMakeFiles/lib.dir
+D:/GitHub/libc/build/CMakeFiles/avl.dir
+D:/GitHub/libc/build/CMakeFiles/edit_cache.dir
+D:/GitHub/libc/build/CMakeFiles/rebuild_cache.dir

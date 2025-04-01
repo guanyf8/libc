@@ -1,0 +1,2 @@
+D:\mingw64\bin\ar.exe qc liblib.a CMakeFiles/lib.dir/D_/GitHub/libc/src/Allocator.c.obj CMakeFiles/lib.dir/D_/GitHub/libc/src/AvlTree.c.obj CMakeFiles/lib.dir/D_/GitHub/libc/src/BST.c.obj CMakeFiles/lib.dir/D_/GitHub/libc/src/CycularQ.c.obj CMakeFiles/lib.dir/D_/GitHub/libc/src/Stack.c.obj CMakeFiles/lib.dir/D_/GitHub/libc/src/hashTable.c.obj CMakeFiles/lib.dir/D_/GitHub/libc/src/map.c.obj CMakeFiles/lib.dir/D_/GitHub/libc/src/rbtree.c.obj
+D:\mingw64\bin\ranlib.exe liblib.a

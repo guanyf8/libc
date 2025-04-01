@@ -1,0 +1,12 @@
+{
+    "cmake.sourceDirectory": "D:/GitHub/libc/test",
+    "files.associations": {
+        "allocator.h": "c",
+        "cycularq.h": "c",
+        "string.h": "c",
+        "macro.h": "c",
+        "bst.h": "c",
+        "avltree.h": "c",
+        "math.h": "c"
+    }
+}

@@ -2,8 +2,7 @@
 #define __MACRO_H__
 
 #include <stddef.h>
-
-#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#include <stdlib.h>
 
 #if defined(__clang__)
 #define typeof __typeof__
@@ -12,8 +11,9 @@
 #define container_of(ptr, type, member) ({                   \
 	const typeof( ((type *)0)->member ) *__mptr = (ptr); \
 	(type *)( (char *)__mptr - offsetof(type,member) );})
-#define RB_ROOT	(struct rb_root) { NULL, }
-#define	rb_entry(ptr, type, member) container_of(ptr, type, member)
 
+
+
+#define new(type) (type*)malloc(sizeof(type))
 
 #endif

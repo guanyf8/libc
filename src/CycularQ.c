@@ -5,8 +5,7 @@
 #include "CycularQ.h"
 
 
-Queue* QueueInit(int cap) {
-    Queue * q=(Queue*) malloc(sizeof(Queue));
+Queue* QueueInit(Queue* q,int cap) {
     q->f=0;
     q->r=0;
     q->size=0;
@@ -31,7 +30,7 @@ void* QueuePop(Queue* q) {
         return NULL;
     }
     void* val=q->space[q->f];
-    q->f= ++q->f % QUEUE_SIZE;
+    q->f= ++q->f % q->cap;
     q->size--;
     return val;
 }
@@ -46,7 +45,7 @@ void* QueuePush(Queue* q, void* val) {
         return NULL; // 队列已满
     }
     q->space[q->r]=val;
-    q->r= ++q->r % QUEUE_SIZE;
+    q->r= ++q->r % q->cap;
     q->size++;
     return val;
 }

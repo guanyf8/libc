@@ -1,0 +1,3 @@
+D:\mingw64\bin\cmake.exe -E rm -f CMakeFiles\avl.dir/objects.a
+D:\mingw64\bin\ar.exe qc CMakeFiles\avl.dir/objects.a @CMakeFiles\avl.dir\objects1.rsp
+D:\\mingw64\bin\gcc.exe  -g -g -Wl,--whole-archive CMakeFiles\avl.dir/objects.a -Wl,--no-whole-archive -o avl.exe -Wl,--out-implib,libavl.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\avl.dir\linkLibs.rsp
