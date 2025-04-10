@@ -3,10 +3,10 @@
 
 
 #include "CycularQ.h"
-#include "Macro.h"
+#include "basic.h"
 
 #define MAX_NODE 1024
-#define BATCH_NODE 64
+#define BATCH_NODE 128
 #define AllocInit(type) AllocatorInit(sizeof(type))
 //节点地址分配器
 typedef struct Allocator {

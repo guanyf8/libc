@@ -1,6 +1,9 @@
 #ifndef STACK_H
 #define STACK_H
 
+#include "stdio.h"
+#include "stdlib.h"
+
 //顺序栈的结构与基本操作
 
 #define stack_size 100
@@ -9,7 +12,7 @@ typedef struct {
 	void** space;
 	int b;
 	int t;
-} ArrStack;    //只存数字，即只存索引，需要协同element数组
+} ArrStack;
 
 ArrStack *stackInit(ArrStack* ,int size);
 

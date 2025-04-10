@@ -6,25 +6,32 @@
 #define PARALLELLJ_HASHTABLE_H
 #include<stdio.h>
 #include<stdlib.h>
-#include<time.h>
-
-
-#define tableSize 128
+#include<pthread.h>
+#include <string.h>
+#include "basic.h"
 
 typedef struct tUnit{
-    int key;
+    union key_type key;
     void* value;
 } tableUnit;
 
-typedef tableUnit hashMap;
+typedef struct hashTable{
+    tableUnit* table;
+    int size;   
+    int used;
+} hashTable;
 
-hashMap* hashInit(hashMap *table);
+hashTable* hashInit(int);
 
-int hashInsert(hashMap * table,tableUnit unit) ;
+int hashInsert(hashTable * table,tableUnit unit) ;
 
-int hashSearch(hashMap* table,int key);
+int hashGetBin(hashTable* table,union key_type key);
 
-void* hashGet(hashMap* table,int key);
+void* hashGet(hashTable* table,union key_type key);
 
-int hashErase(hashMap* table,int key);
+int hashErase(hashTable* table,union key_type key);
+
+void hashFree(hashTable* table);
+
+void hashTraverse(hashTable* table);
 #endif //PARALLELLJ_HASHTABLE_H

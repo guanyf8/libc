@@ -1,6 +1,5 @@
 #include "Stack.h"
-#include "stdio.h"
-#include "stdlib.h"
+
 
 ArrStack* stackInit(ArrStack* st,int size) {
 	st->space = (void**)malloc(sizeof(void*) * size);

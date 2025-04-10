@@ -12,6 +12,10 @@ Allocator* AllocatorInit(int size){
     }
 }
 
+void resize(Allocator* aq){
+    //todo
+}
+
 void* NodeAlloc(Allocator* aq){
     return QueuePop(aq->q);
 }

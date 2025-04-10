@@ -20,7 +20,7 @@
   linux/lib/rbtree.c
 */
 
-#include "rbtree_concurrent.h"
+#include "rbtree.h"
 
 static void __rb_rotate_left(struct rb_node *node, struct rb_root *root)
 {
@@ -384,3 +384,4 @@ void rb_replace_node(struct rb_node *victim, struct rb_node *_new,
 	/* Copy the pointers/colour from the victim to the replacement */
 	*_new = *victim;
 }
+
