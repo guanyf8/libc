@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "D:/GitHub/libc/test",
+    "cmake.sourceDirectory": "D:/GitHub/libc",
     "files.associations": {
         "allocator.h": "c",
         "cycularq.h": "c",

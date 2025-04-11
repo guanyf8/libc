@@ -4,7 +4,7 @@
 
 
 #include "hashTable.h"
-#include "Stack.h"
+#include "stack.h"
 
 
 int collasp=0;

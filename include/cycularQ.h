@@ -20,6 +20,8 @@ void QueueClose(Queue *que);
 
 int QueueGetF(Queue *q);
 
+void QueueResize(Queue *q,int new_cap);
+
 void* QueuePop(Queue *q);
 
 int QueueGetR(Queue *q);

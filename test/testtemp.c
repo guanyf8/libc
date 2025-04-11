@@ -21,8 +21,7 @@ int main(){
     // printf("%x\n",a.num);
 
     int i=4;
-    i<<2;
-    printf("%d",i);
+    printf("%d",i<<-2);
 
     return 0;
 }

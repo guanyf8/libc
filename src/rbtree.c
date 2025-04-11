@@ -385,3 +385,38 @@ void rb_replace_node(struct rb_node *victim, struct rb_node *_new,
 	*_new = *victim;
 }
 
+struct rb_node* post_first(struct rb_root* root){
+	struct rb_node* node = root->rb_node;
+	
+	while (1) {
+        if (node->rb_left) {
+            node = node->rb_left;
+        }else if (node->rb_right) {
+            node = node->rb_right;
+        }else {
+            return node;
+        }
+    }
+}
+
+struct rb_node* post_next(struct rb_node* node){
+	if(!node->rb_parent)return NULL;
+
+	//右节点直接后续父节点
+	struct rb_node* right = node->rb_parent->rb_right;
+	if( !right || right==node)return node->rb_parent;
+	
+	
+	node = right;
+	while(1){
+		if (node->rb_left) {
+			node = node->rb_left;
+		}else if (node->rb_right) {
+			node = node->rb_right;
+		}else {
+			return node;
+		}
+	}
+	return node;
+    
+}

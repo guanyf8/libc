@@ -97,7 +97,7 @@ static inline struct page * rb_insert_page_cache(struct inode * inode,
 #include <stddef.h>
 #include <basic.h>
 #include <pthread.h>
-#include <Stack.h>
+#include <stack.h>
 
 struct rb_node
 {
@@ -127,6 +127,8 @@ extern struct rb_node *rb_next(struct rb_node *);
 extern struct rb_node *rb_prev(struct rb_node *);
 extern struct rb_node *rb_first(struct rb_root *);
 extern struct rb_node *rb_last(struct rb_root *);
+extern struct rb_node *post_first(struct rb_root *);
+extern struct rb_node *post_next(struct rb_node *);
 
 /* Fast replacement of a single node without remove/rebalance/add/rebalance */
 extern void rb_replace_node(struct rb_node *victim, struct rb_node *_new,

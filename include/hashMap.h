@@ -6,8 +6,9 @@
 #include "rbtree.h"
 #include "pthread.h"
 
-#define INITIAL_CAPACITY 4
-#define LOAD_FACTOR 0.75
+#define INITIAL_CAPACITY 4 
+#define UPPER_LOAD_FACTOR 0.75
+#define LOWER_LOAD_FACTOR 0.10
 #define TREEIFY_THRESHOLD 8
 
 enum bin_type {
@@ -39,7 +40,8 @@ typedef struct hash_map {
     unsigned int size;
     //总是2的倍数，因此只记位移
     unsigned short capacity_shift;
-    unsigned int resize_threshold;
+    unsigned int upper_threshold;
+    unsigned int lower_threshold;
 
     struct hash_bin *bins;
 

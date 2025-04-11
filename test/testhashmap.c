@@ -1,4 +1,4 @@
-#include "concurrent_map.h"
+#include "hashMap.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,14 +13,14 @@ static int rb_tree_height(struct rb_node* node) {
     return (lh > rh ? lh : rh) + 1;
 }
 
-void rbTraverse(map* treemap){
+void rbTraverse(struct rb_root root,int tab){
     Queue* q=QueueInit(new(Queue),100);
-    if (treemap->root.rb_node == NULL) return;
-    int h = rb_tree_height(treemap->root.rb_node);
+    if (root.rb_node == NULL) return;
+    int h = rb_tree_height(root.rb_node);
     const int nodeWidth = 5; // 每个节点的输出宽度，根据需要调整
 
-    QueuePush(q,treemap->root.rb_node);
-
+    QueuePush(q,root.rb_node);
+    printf("%*s",tab,"");
     for (int level = 0; level < h; level++) {
         int currentLevelNodes = (int)pow(2, level);
         int leadingSpaces = (pow(2, h - level - 1) - 1) * nodeWidth;
@@ -34,7 +34,7 @@ void rbTraverse(map* treemap){
         for (int i = 0; i < currentLevelNodes; i++) {
             struct rb_node* node=QueuePop(q);
             if (node != NULL) {
-                printf("%2d(%c)",(container_of(node,struct map_node,rb_node)->key).num,node->rb_color?'R':'B');
+                printf("%2d(%c)",(container_of(node,struct hash_node,link_point.rb)->key).num,node->rb_color?'R':'B');
                 QueuePush(q, node->rb_left);
                 QueuePush(q, node->rb_right);
             } else {
@@ -50,14 +50,39 @@ void rbTraverse(map* treemap){
                 }
             }
         }
-        printf("\n");
+        printf("\n%*s",tab,"");
     }
+    printf("\n");
     QueueClose(q);
 }
 
-void test_Map() {
+void listTraverse(struct hlist_head head,int tab){
+    struct hash_node *hnode;
+    struct hlist_node *tmp;
+    printf("%*s",tab,"");
+    hlist_for_each_entry(hnode, tmp, &head,link_point.hlist) {
+        printf("%d\t",(hnode->key).num);
+    }
+    printf("\n");
+}
+
+void hashMapTraverse(hashMap* map){
+    
+    int i=0;
+    for(;i<(1<<map->capacity_shift);i++){
+        printf("bin %d:\n",i);
+        if(map->bins[i].type==HLIST_BIN){
+            listTraverse(map->bins[i].data.list,6);
+        }else if(map->bins[i].type==RB_BIN){
+            rbTraverse(map->bins[i].data.rb_tree,6);
+        }
+    }
+
+}
+
+void test_hashMap() {
     // 初始化 BST
-    map* _map = map_init(new(map),numcmp);
+    hashMap* _map = hashMapInit(numcmp);
     if (!_map) {
         printf("Failed to initialize BST\n");
         return;
@@ -76,27 +101,23 @@ void test_Map() {
     int i;
 
     for(i=0;i<40;i++){
-        map_node* node=new(map_node);
-        node->rb_node=*new(struct rb_node);
-        node->key.num=key[i];
-        node->value=(void*)NULL;
-        map_insert(_map,node);
-        rbTraverse(_map);
+        hashMapPut(_map,(union key_type)key[i],NULL);
+        hashMapTraverse(_map);
         printf("i is %d\n",i);
     }
 
     for(i=0;i<20;i++){
         int k=key[rand()%40];
-        map_erase(_map,(union key_type)k);
-        rbTraverse(_map);
+        hashMapErase(_map,(union key_type)k);
+        hashMapTraverse(_map);
         printf("delete %d\n",k);
     }
 
     // 释放 BST
-    map_free(_map);
+    hashMapFree(_map);
 }
 
 int main() {
-    test_Map();
+    test_hashMap();
     return 0;
 }

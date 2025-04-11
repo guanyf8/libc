@@ -1,6 +1,6 @@
 
 
-#include "CycularQ.h"
+#include "cycularQ.h"
 
 
 Queue* QueueInit(Queue* q,int cap) {
@@ -15,6 +15,11 @@ Queue* QueueInit(Queue* q,int cap) {
 void QueueClose(Queue* que){
     free(que->space);
     free(que);
+}
+
+void QueueResize(Queue* q, int new_cap){
+    q->cap=new_cap;
+    q->space=(void**) realloc(q->space,sizeof(void*)*new_cap);
 }
 
 
