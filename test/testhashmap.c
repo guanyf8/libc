@@ -19,7 +19,7 @@ void rbTraverse(struct rb_root root,int tab){
     int h = rb_tree_height(root.rb_node);
     const int nodeWidth = 5; // 每个节点的输出宽度，根据需要调整
 
-    QueuePush(q,root.rb_node);
+    QueuePush(q,(root.rb_node));
     printf("%*s",tab,"");
     for (int level = 0; level < h; level++) {
         int currentLevelNodes = (int)pow(2, level);
@@ -32,11 +32,12 @@ void rbTraverse(struct rb_root root,int tab){
         }
 
         for (int i = 0; i < currentLevelNodes; i++) {
-            struct rb_node* node=QueuePop(q);
+            struct rb_node* node=NULL;
+            QueuePopIn(q,&node);
             if (node != NULL) {
                 printf("%2d(%c)",(container_of(node,struct hash_node,link_point.rb)->key).num,node->rb_color?'R':'B');
-                QueuePush(q, node->rb_left);
-                QueuePush(q, node->rb_right);
+                QueuePush(q, (node->rb_left));
+                QueuePush(q, (node->rb_right));
             } else {
                 printf("%*s", nodeWidth, "N");
                 QueuePush(q, NULL);
@@ -82,7 +83,9 @@ void hashMapTraverse(hashMap* map){
 
 void test_hashMap() {
     // 初始化 BST
-    hashMap* _map = hashMapInit(numcmp);
+    hashMap* _map =new(hashMap); 
+    hashMapInit(_map,numcmp,NULL);
+    //hashMap* _map = hashMapInit(strcmp,strhash);
     if (!_map) {
         printf("Failed to initialize BST\n");
         return;

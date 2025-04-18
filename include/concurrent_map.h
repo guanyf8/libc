@@ -31,9 +31,9 @@ tree_map* map_init(tree_map* ,int (*cmp)(union key_type a,union key_type b));
 int map_insert(tree_map* treemap, struct map_node* node) ;
 
 // 查找键值对
-void *map_find(tree_map* treemap, union key_type key);
+void *map_get_value(tree_map* treemap, union key_type key);
 
-map_node *map_search(tree_map* treemap, union key_type key);
+map_node *map_get(tree_map* treemap, union key_type key);
 
 // 删除键值对
 void map_erase(tree_map* treemap, union key_type key) ;

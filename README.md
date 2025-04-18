@@ -2,25 +2,21 @@
 LibC provides C implementations of data structures and typical algorithms for general use. Here are what we've done. 
 
 ## Data Structure
-* sequential stack
-* cycular queue
-* avl tree and binary searching tree based on it
-* concurrent rb tree (based on linux kernel 2.6)
-* concurrent map based on rb tree
+* Sequential Stack
+* Cycular Queue
+* AVL Tree and Binary Searching Tree based on it
+* Concurrent RB Tree (based on linux kernel 2.6)
+* Concurrent Map based on rb tree
 * hashtable by double hashing with dynamic resize
 * complete binary tree and min heap based on it
 * an array min heap
 * linked list, double linked list (based on linux kernel 2.6)
 * concurrent linked hash map with dynamic resize and treeify to rbtree
-
-### todo
 * graph (adj list)
 * LCRS tree
+
+
 ## Algorithm
-
-### todo
-
-
 * dijkstra algorithm
 * critical path
 * prim algorithm
@@ -28,6 +24,7 @@ LibC provides C implementations of data structures and typical algorithms for ge
 
 * merge sort
 * quick sort
+* m-way merge sort
 
 ## application examples
 
@@ -37,6 +34,6 @@ LibC provides C implementations of data structures and typical algorithms for ge
 * hanoi(non recursive)
 * polynomial calculation
 * infix_to_postfix expression and infix calculaiton
-* m-way merge sort
+
 * 4-way huffman tree
 * simulated memory management

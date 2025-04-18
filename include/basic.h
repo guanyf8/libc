@@ -25,5 +25,6 @@ static inline void prefetch(const void *x) {;}
 
 #define new(type) (type*)malloc(sizeof(type))
 #define new_array(type,size) (type*)malloc(sizeof(type)*size)
+#define deep_copy(src) ({strcpy(malloc(strlen(src)+1),src);})
 
 #endif

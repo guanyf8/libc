@@ -19,7 +19,7 @@ void rbTraverse(map* treemap){
     int h = rb_tree_height(treemap->root.rb_node);
     const int nodeWidth = 5; // 每个节点的输出宽度，根据需要调整
 
-    QueuePush(q,treemap->root.rb_node);
+    QueuePush(q,(treemap->root.rb_node));
 
     for (int level = 0; level < h; level++) {
         int currentLevelNodes = (int)pow(2, level);
@@ -32,11 +32,12 @@ void rbTraverse(map* treemap){
         }
 
         for (int i = 0; i < currentLevelNodes; i++) {
-            struct rb_node* node=QueuePop(q);
+            struct rb_node* node=NULL;
+            QueuePopIn(q,&node);
             if (node != NULL) {
                 printf("%2d(%c)",(container_of(node,struct map_node,rb_node)->key).num,node->rb_color?'R':'B');
-                QueuePush(q, node->rb_left);
-                QueuePush(q, node->rb_right);
+                QueuePush(q, (node->rb_left));
+                QueuePush(q, (node->rb_right));
             } else {
                 printf("%*s", nodeWidth, "N");
                 QueuePush(q, NULL);

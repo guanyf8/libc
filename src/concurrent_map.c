@@ -39,8 +39,10 @@ int map_insert(tree_map* treemap, struct map_node* node) {
         else if (treemap->cmp(key,_this->key)>0){
             _new = &((*_new)->rb_right);
         }
-        else
+        else{
+            pthread_rwlock_unlock(&root->lock);
             return -1; // 键已存在
+        }
     }
 
     // 链接节点
@@ -52,7 +54,7 @@ int map_insert(tree_map* treemap, struct map_node* node) {
 }
 
 // 查找键值对
-void *map_find(tree_map* treemap, union key_type key) {
+void *map_get_value(tree_map* treemap, union key_type key) {
     struct rb_root* root=&treemap->root;
     pthread_rwlock_rdlock(&root->lock);
     struct rb_node *node = root->rb_node;
@@ -63,15 +65,17 @@ void *map_find(tree_map* treemap, union key_type key) {
             node = node->rb_left;
         else if (treemap->cmp(key,_this->key)>0)
             node = node->rb_right;
-        else
+        else{
+            pthread_rwlock_unlock(&root->lock);
             return _this->value;
+        }
     }
     pthread_rwlock_unlock(&root->lock);
     return NULL;
 }
 
 // 查找键值对
-map_node *map_search(tree_map* treemap, union key_type key) {
+map_node *map_get(tree_map* treemap, union key_type key) {
     struct rb_root* root=&treemap->root;
     pthread_rwlock_rdlock(&root->lock);
     struct rb_node *node = root->rb_node;
@@ -83,8 +87,10 @@ map_node *map_search(tree_map* treemap, union key_type key) {
             node = node->rb_left;
         else if (treemap->cmp(key,_this->key)>0)
             node = node->rb_right;
-        else
-            return _this;
+        else{
+            pthread_rwlock_unlock(&root->lock);
+            return _this->value;
+        }
     }
     pthread_rwlock_unlock(&root->lock);
     return NULL;

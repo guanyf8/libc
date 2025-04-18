@@ -13,7 +13,7 @@ allocator* allocatorInit(int size){
 
     void* temp=node->space;
     for(;temp<node->space+BATCH_NODE;temp+=size){
-        QueuePush(alloc->q,(void*)temp);
+        QueuePush(alloc->q,temp);
     }
 }
 
@@ -25,15 +25,17 @@ void resize(allocator* alloc){
 
     void* temp=node->space;
     for(;temp<node->space+BATCH_NODE;temp+=alloc->unit_size){
-        QueuePush(alloc->q,(void*)temp);
+        QueuePush(alloc->q,temp);
     }
 }
 
 void* nodeAlloc(allocator* alloc){
-    void * ret=QueuePop(alloc->q);
+    void * ret;
+    //QueuePop返回的是返回值所在的地址
+    QueuePopIn(alloc->q,&ret);
     if(ret==NULL){
         resize(alloc);
-        ret=QueuePop(alloc->q);
+        QueuePopIn(alloc->q,&ret);
     }
     return ret;
 }

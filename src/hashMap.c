@@ -1,7 +1,7 @@
 #include "hashMap.h"
 
-static inline int hash(int shift, long long key) {
-    return key & ~(0xffffffff<<shift);
+static inline unsigned int hash_default(union key_type key) {
+    return key.num;
 }
 
 // 扩容哈希表
@@ -15,6 +15,7 @@ static int resize(struct hash_map *map, char shift) {
     for (int i = 0; i < (1<<new_capacity); i++) {
         new_bins[i].type = HLIST_BIN;
         INIT_HLIST_HEAD(&new_bins[i].data.list);
+        pthread_spin_init(&new_bins[i].lock, PTHREAD_PROCESS_PRIVATE);
     }
     
     //pthread_spin_lock(&map->resize_lock);
@@ -27,7 +28,7 @@ static int resize(struct hash_map *map, char shift) {
             struct hash_node *hnode;
             struct hlist_node *tmp,*tmp_next;
             hlist_for_each_entry_safe(hnode, tmp,tmp_next, &old_bin->data.list,link_point.hlist) {
-                unsigned int new_index = hash(new_capacity, *(long long*)&hnode->key);
+                unsigned int new_index = map->hash(hnode->key) & ~(0xffffffff<<new_capacity);
                 struct hash_bin *new_bin = &new_bins[new_index];
                 hlist_add_head(&hnode->link_point.hlist, &new_bin->data.list);
             }
@@ -36,7 +37,7 @@ static int resize(struct hash_map *map, char shift) {
             //todo
             for (node = post_first(&old_bin->data.rb_tree); node && ({next=post_next(node);1;}); node = next) {
                 struct hash_node *hnode = rb_entry(node, struct hash_node, link_point.rb);
-                unsigned int new_index = hash(new_capacity, *(long long*)&hnode->key);
+                unsigned int new_index = map->hash(hnode->key) & ~(0xffffffff<<new_capacity);
                 struct hash_bin *new_bin = &new_bins[new_index];
                 hlist_add_head(&hnode->link_point.hlist, &new_bin->data.list);
             }
@@ -83,8 +84,8 @@ static void treeify(hashMap* hashmap, struct hash_bin *bin) {
 }
 
 // 初始化哈希表
-struct hash_map *hashMapInit( int (*key_compare)(union key_type, union key_type)) {
-    struct hash_map *map = malloc(sizeof(struct hash_map));
+struct hash_map *hashMapInit(struct hash_map *map,int (*key_compare)(union key_type, union key_type),
+                            unsigned int (*hash)(union key_type)) {
     if (!map) return NULL;
 
     map->capacity_shift = INITIAL_CAPACITY;
@@ -105,6 +106,7 @@ struct hash_map *hashMapInit( int (*key_compare)(union key_type, union key_type)
     }
 
     map->key_compare = key_compare;
+    map->hash = hash?hash:hash_default;
     pthread_spin_init(&map->resize_lock,PTHREAD_PROCESS_PRIVATE);
     return map;
 }
@@ -122,23 +124,24 @@ int hashMapPut(struct hash_map *hashmap, union key_type key, void *value) {
             return -ENOMEM;
         }
     }
-
-    index = hash(hashmap->capacity_shift, *(long long*)&key);
+    int hash;
+    index = (hash=hashmap->hash(key)) & ~(0xffffffff<<hashmap->capacity_shift);
     bin = &hashmap->bins[index];
-    
+
     //pthread_spin_lock(&bin->lock);
     
     // 尾插防止已存在相同key
     if (bin->type == HLIST_BIN) {
         int size=0;
         struct hash_node *hnode;
-        struct hlist_node *tmp,*tmp_next;
+        struct hlist_node *tmp,*tmp_next,*link;
         hlist_for_each_entry_safe(hnode, tmp,tmp_next, &bin->data.list,link_point.hlist)  {
             if (hashmap->key_compare(hnode->key, key) == 0) {
                 hnode->value = value;
                 //pthread_spin_unlock(&bin->lock);
                 return 0;
             }
+            link=tmp;
             size++;
         }
         
@@ -149,7 +152,9 @@ int hashMapPut(struct hash_map *hashmap, union key_type key, void *value) {
         }
         new_node->key = key;
         new_node->value = value;
-        hlist_add_head(&new_node->link_point.hlist, &bin->data.list);
+        new_node->hash = hash;
+        hlist_add_after(link,&new_node->link_point.hlist);
+        // hlist_add_head(&new_node->link_point.hlist, &bin->data.list);
         
         // 检查是否需要转红黑树
         if (size > TREEIFY_THRESHOLD) {
@@ -183,6 +188,7 @@ int hashMapPut(struct hash_map *hashmap, union key_type key, void *value) {
         }
         new_node->key = key;
         new_node->value = value;
+        new_node->hash = hash;
 
         rb_link_node(&new_node->link_point.rb, parent, _new);
         rb_insert_color(&new_node->link_point.rb, &bin->data.rb_tree);
@@ -196,7 +202,7 @@ int hashMapPut(struct hash_map *hashmap, union key_type key, void *value) {
 
 // 查找元素（简化版）
 void *hashMapGet(struct hash_map *map, union key_type key) {
-    unsigned long index = hash(map->capacity_shift, *(long long*)&key);
+    unsigned long index = map->hash(key) & ~(0xffffffff<<map->capacity_shift);
     struct hash_bin *bin = &map->bins[index];
     void *value = NULL;
 
@@ -217,12 +223,10 @@ void *hashMapGet(struct hash_map *map, union key_type key) {
         while (node) {
             struct hash_node *hnode = rb_entry(node, struct hash_node, link_point.rb);
             int cmp = map->key_compare(hnode->key, key);
-            
             if (cmp == 0) {
                 value = hnode->value;
                 break;
             }
-            
             node = cmp < 0 ? node->rb_left : node->rb_right;
         }
     }
@@ -232,7 +236,7 @@ void *hashMapGet(struct hash_map *map, union key_type key) {
 }
 
 int hashMapErase(struct hash_map *map, union key_type key){
-    unsigned int index = hash(map->capacity_shift, *(long long*)&key);
+    unsigned int index = map->hash(key) & ~(0xffffffff<<map->capacity_shift);
     struct hash_bin* bin=&map->bins[index];
     int deleted = 0;
 

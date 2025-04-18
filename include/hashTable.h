@@ -11,6 +11,7 @@
 #include "basic.h"
 
 typedef struct tUnit{
+    // int hash1,hash2;
     union key_type key;
     void* value;
 } tableUnit;
@@ -19,11 +20,21 @@ typedef struct hashTable{
     tableUnit* table;
     int size;   
     int used;
+    int (*hash1)(union key_type key);
+    int (*hash2)(union key_type key);
+    int (*cmp)(union key_type a, union key_type b);
 } hashTable;
 
-hashTable* hashInit(int);
+#define hashInit(table,exponent) hashInitFunction(table,exponent,NULL,NULL,NULL)
 
-int hashInsert(hashTable * table,tableUnit unit) ;
+hashTable* hashInitFunction(hashTable* table,int exponent,
+                    int (*hash1)(union key_type),
+                    int (*hash2)(union key_type),
+                    int (*cmp)(union key_type,union key_type));
+
+#define hashInsert(table,key,value) hashInsertUnit(table,(tableUnit){key,value})
+
+int hashInsertUnit(hashTable * table,tableUnit unit) ;
 
 int hashGetBin(hashTable* table,union key_type key);
 
@@ -34,4 +45,5 @@ int hashErase(hashTable* table,union key_type key);
 void hashFree(hashTable* table);
 
 void hashTraverse(hashTable* table);
+
 #endif //PARALLELLJ_HASHTABLE_H

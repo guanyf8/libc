@@ -2,7 +2,8 @@
 
 
 int main(void){
-    hashTable* t=hashInit(3);
+    hashTable t;
+    hashInit(&t,3);
 
     int key[30]={12,15,18,24,21,
         30,42,45,27,36,
@@ -14,14 +15,13 @@ int main(void){
     int i;
 
     for(i=0;i<30;i++){
-        tableUnit node={key[i],NULL};
-        hashInsert(t,node);
-        hashTraverse(t);
+        hashInsert(&t,key[i],NULL);
+        hashTraverse(&t);
         printf("i is %d\n",i);
     }
     for(i=0;i<30;i++){
-        hashErase(t,(union key_type)key[i]);
-        hashTraverse(t);
+        hashErase(&t,(union key_type)key[i]);
+        hashTraverse(&t);
         printf("delete i is %d\n",key[i]);
     }
 

@@ -3,22 +3,34 @@
 
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 
 //顺序栈的结构与基本操作
 
 #define stack_size 100
 
 typedef struct {
-	void** space;
-	int b;
+	void* space;
+	int size;
 	int t;
+	int step_size;
 } ArrStack;
 
-ArrStack *stackInit(ArrStack* ,int size);
+#define stackInit(s,size) stackInitStruct(s,size,sizeof(void*))
 
-void *stackPop(ArrStack *st);
+ArrStack *stackInitStruct(ArrStack* ,int size,int step);
 
-void *stackPush(ArrStack *stack, void *x);
+#define stackPop(s) ({ char* arg=malloc((s)->step_size);  \
+						stackPopIn(s,&arg);\
+						arg;})
+
+void *stackPopIn(ArrStack *st,void* dst);
+
+#define stackPush(s,val) ({ typeof(val) __temp=(val); char arg[(s)->step_size];\
+							memcpy(arg,&__temp,(s)->step_size);\
+							stackPushFrom(s,&arg);})
+
+void *stackPushFrom(ArrStack *stack, void *x);
 
 #endif
 

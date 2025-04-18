@@ -1,27 +1,30 @@
 #include "stack.h"
 
 
-ArrStack* stackInit(ArrStack* st,int size) {
-	st->space = (void**)malloc(sizeof(void*) * size);
-	st->b = st->t = -1;
+ArrStack* stackInitStruct(ArrStack* st,int size,int step) {
+	st->space = (void*)malloc(step * size);
+	st->t = -1;
+    st->size=size;
+    st->step_size = step;
 }
 
-void* stackPop(ArrStack* st) {
-    if(st->b == st->t){
-        printf("empty");
+void* stackPopIn(ArrStack* st,void* a) {
+    if(st->t==-1){
+        memset(a,0,st->step_size);
         return NULL;
     }
-    void* a = st->space[st->t];
+    int step = st->step_size;
+    memcpy(a,st->space+st->t*step,step);
     st->t--;
     return a;
 }
 
-void* stackPush(ArrStack* stack, void* x) {
-	if (stack->t > stack_size - 2) { 
-		printf("space out");
+void* stackPushFrom(ArrStack* stack, void* x) {
+	if (stack->t == stack->size - 1) { 
 		return NULL;
 	}
     stack->t++;
-    stack->space[stack->t] = x;
+    int step = stack->step_size;
+    memcpy(stack->space+stack->t*step, x, step);
     return x;
 }

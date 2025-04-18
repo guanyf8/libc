@@ -122,12 +122,13 @@ void bstFree(bst* treemap){
 #include <math.h>
 
 void bstTraverse(bst* treemap){
-    Queue* q=QueueInit(new(Queue),100);
+    Queue q;
+    QueueInit(&q,100);
     if (treemap->root->root == NULL) return;
     int h = treemap->root->root->height;
     const int nodeWidth = 2; // 每个节点的输出宽度，根据需要调整
 
-    QueuePush(q,treemap->root->root);
+    QueuePush(&q,treemap->root->root);
 
     for (int level = 0; level < h; level++) {
         int currentLevelNodes = (int)pow(2, level);
@@ -140,15 +141,16 @@ void bstTraverse(bst* treemap){
         }
 
         for (int i = 0; i < currentLevelNodes; i++) {
-            avl_node* node=QueuePop(q);
+            avl_node* node=NULL;
+            QueuePopIn(&q,&node);
             if (node != NULL) {
                 printf("%*d", nodeWidth,(container_of(node,struct bstnode,avlnode)->key).num);
-                QueuePush(q, node->left);
-                QueuePush(q, node->right);
+                QueuePush(&q, node->left);
+                QueuePush(&q, node->right);
             } else {
                 printf("%*s", nodeWidth, " ");
-                QueuePush(q, NULL);
-                QueuePush(q, NULL);
+                QueuePush(&q, NULL);
+                QueuePush(&q, NULL);
             }
 
             // 打印节点之间的空格
@@ -160,5 +162,4 @@ void bstTraverse(bst* treemap){
         }
         printf("\n");
     }
-    QueueClose(q);
 }

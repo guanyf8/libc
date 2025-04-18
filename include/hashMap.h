@@ -6,7 +6,7 @@
 #include "rbtree.h"
 #include "pthread.h"
 
-#define INITIAL_CAPACITY 4 
+#define INITIAL_CAPACITY 4
 #define UPPER_LOAD_FACTOR 0.75
 #define LOWER_LOAD_FACTOR 0.10
 #define TREEIFY_THRESHOLD 8
@@ -16,14 +16,12 @@ enum bin_type {
     RB_BIN
 };
 
-union bin_data {
-    struct hlist_head list;
-    struct rb_root rb_tree;
-};
-
 struct hash_bin {
     enum bin_type type;
-    union bin_data data;
+    union bin_data {
+        struct hlist_head list;
+        struct rb_root rb_tree;
+    } data;
     pthread_spinlock_t lock;
 };
 
@@ -32,6 +30,7 @@ struct hash_node {
         struct hlist_node hlist;
         struct rb_node rb;
     } link_point;
+    unsigned int hash;
     union key_type key;
     void *value;
 };
@@ -45,11 +44,17 @@ typedef struct hash_map {
 
     struct hash_bin *bins;
 
+    //全局锁
     pthread_spinlock_t resize_lock;
+
+    //哈希与比较函数
+    unsigned int (*hash)(union key_type key_type);
     int (*key_compare)(union key_type key1, union key_type key2);
 } hashMap;
 
-hashMap* hashMapInit(int (*key_compare)(union key_type, union key_type));
+hashMap* hashMapInit(struct hash_map* map,
+                    int (*key_compare)(union key_type, union key_type),
+                    unsigned int (*hash)(union key_type));
 
 void hashMapFree(hashMap* map);
 
