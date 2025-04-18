@@ -29,6 +29,7 @@
         "stack.h": "c",
         "lcrs_tree.h": "c",
         "bintree.h": "c",
-        "graph.h": "c"
+        "graph.h": "c",
+        "unordered_map": "cpp"
     }
 }
