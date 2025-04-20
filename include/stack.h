@@ -16,6 +16,8 @@ typedef struct {
 	int step_size;
 } ArrStack;
 
+typedef ArrStack Stack;
+
 #define stackInit(s,size) stackInitStruct(s,size,sizeof(void*))
 
 ArrStack *stackInitStruct(ArrStack* ,int size,int step);
@@ -31,6 +33,10 @@ void *stackPopIn(ArrStack *st,void* dst);
 							stackPushFrom(s,&arg);})
 
 void *stackPushFrom(ArrStack *stack, void *x);
+
+void stackResize(Stack* s, int new_cap);
+
+void stackClose(Stack* s);
 
 #endif
 

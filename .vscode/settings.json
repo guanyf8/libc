@@ -30,6 +30,8 @@
         "lcrs_tree.h": "c",
         "bintree.h": "c",
         "graph.h": "c",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "list.h": "c",
+        "typeinfo": "c"
     }
 }

@@ -2,7 +2,7 @@
 #define ALLOC_H
 
 
-#include "cycularQ.h"
+#include "stack.h"
 #include "basic.h"
 #include "list.h"
 
@@ -17,8 +17,8 @@ typedef struct memUnit{
 
 //节点地址分配器
 typedef struct allocator {
-    Queue* q;
-    struct list_node* mem_list;
+    Stack* q;
+    struct list_node mem_list;
     int unit_size;
 } allocator;
 

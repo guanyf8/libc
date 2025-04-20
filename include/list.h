@@ -8,14 +8,14 @@ struct list_node{
 	struct list_node* next;
 };
 
-#define LIST_HEAD_INIT(name) { &(name)}
+#define LIST_HEAD_INIT(name) { NULL}
 
 #define LIST_HEAD(name) \
-	struct list_node name = LIST_HEAD_INIT(name)
+	struct list_node name = LIST_HEAD_INIT(NULL)
 
 static inline void INIT_LIST_HEAD(struct list_node *list)
 {
-	list->next = list;
+	list->next = NULL;
 }
 
 /*

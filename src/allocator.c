@@ -3,51 +3,52 @@
 
 allocator* allocatorInit(int size){
     allocator *alloc = (allocator*)malloc(sizeof(allocator));
-    alloc->q=QueueInit(new(Queue),BATCH_NODE);
+    alloc->q=stackInit(new(Stack),BATCH_NODE);
     alloc->unit_size=size;
+    INIT_LIST_HEAD(&alloc->mem_list);
 
     memUnit* node=new(memUnit);
     node->space=malloc(size*BATCH_NODE);
-    node->node.next=NULL;
-    alloc->mem_list=&node->node;
+    list_add(&node->node,&alloc->mem_list);
 
     void* temp=node->space;
     for(;temp<node->space+BATCH_NODE;temp+=size){
-        QueuePush(alloc->q,temp);
+        stackPush(alloc->q,temp);
     }
+    return alloc;
 }
 
 void resize(allocator* alloc){
     memUnit* node=new(memUnit);
     node->space=malloc(alloc->unit_size*BATCH_NODE);
-    list_add(&node->node,alloc->mem_list);
-    QueueResize(alloc->q,alloc->q->cap+BATCH_NODE);
+    list_add(&node->node,&alloc->mem_list);
+
+    stackResize(alloc->q,alloc->q->size+BATCH_NODE);
 
     void* temp=node->space;
     for(;temp<node->space+BATCH_NODE;temp+=alloc->unit_size){
-        QueuePush(alloc->q,temp);
+        stackPush(alloc->q,temp);
     }
 }
 
 void* nodeAlloc(allocator* alloc){
     void * ret;
-    //QueuePop返回的是返回值所在的地址
-    QueuePopIn(alloc->q,&ret);
+    stackPopIn(alloc->q,&ret);
     if(ret==NULL){
         resize(alloc);
-        QueuePopIn(alloc->q,&ret);
+        stackPopIn(alloc->q,&ret);
     }
     return ret;
 }
 
 void nodeFree(allocator* alloc,void* node){
-    QueuePush(alloc->q,node);
+    stackPush(alloc->q,node);
 }
 
 void allocatorFree(allocator* alloc){
-    QueueClose(alloc->q);
+    stackClose(alloc->q);
     memUnit* node,*tnode;
-    list_for_each_entry_safe(node,tnode,alloc->mem_list,node){
+    list_for_each_entry_safe(node,tnode,&alloc->mem_list,node){
         free(node->space);
         free(node);
     }

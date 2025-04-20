@@ -28,3 +28,12 @@ void* stackPushFrom(ArrStack* stack, void* x) {
     memcpy(stack->space+stack->t*step, x, step);
     return x;
 }
+
+void stackResize(Stack* s, int new_cap){
+    s->size=new_cap;
+    s->space=(void*) realloc(s->space,s->step_size*new_cap);
+}
+
+void stackClose(Stack* s){
+    free(s->space);
+}

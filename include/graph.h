@@ -36,6 +36,26 @@ typedef struct graph {
 
 void graphInit(graph *G);
 
+/*
+graph: lines 
+
+lines: lines line
+	 | line
+
+line: vertax "->" adjacency_list '\n'
+
+adjacency_list: adjacency_list "," edge
+			  | edge 
+
+vertax: name ':' weight 
+	  | name
+
+edge: name ':' weight
+
+name: [a-zA-Z] [a-zA-Z0-9]*
+
+weight: [0-9]+
+*/
 void graphCreate(graph *g, const char *str);
 
 void graphTraverse(graph *g);

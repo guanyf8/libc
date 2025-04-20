@@ -27,3 +27,13 @@ foreach(file IN LISTS test_files)
     target_link_libraries(${elfname} llib pthread)
 endforeach()
 
+file(GLOB example_files "example/*.c")
+
+foreach(file IN LISTS example_files)
+    # Get file name without directory
+    get_filename_component(elfname ${file} NAME_WE)
+    add_executable(${elfname} ${file})
+    target_link_libraries(${elfname} llib pthread)
+endforeach()
+
+

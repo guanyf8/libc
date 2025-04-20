@@ -182,7 +182,7 @@ void topoSort(graph* G,Queue* q) {
 		vertice* vert;
 		struct dlist_node node;
 	} *temp_visit,*next_visit;
-	struct dlist_node to_visit=LIST_HEAD_INIT(to_visit),*temp_node;
+	struct dlist_node to_visit=DLIST_HEAD_INIT(to_visit),*temp_node;
 	dlist_for_each_entry(temp_vert,&G->vert_list,vert_node){
 		temp_visit=new(struct visit_node);
 		temp_visit->vert=temp_vert;

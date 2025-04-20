@@ -27,13 +27,9 @@ LibC provides C implementations of data structures and typical algorithms for ge
 * [m-way merge sort](./include/sort.h)
 
 ## application examples
-
-### todo
-* huffman tree
-* hanoi
-* hanoi(non recursive)
-* polynomial calculation
-* infix_to_postfix expression and infix calculaiton
-
-* 4-way huffman tree
-* simulated memory management
+* [huffman tree](./example/huffman_tree.c)
+* [hanoi(non recursive)](./example/hanoi.c)
+* [polynomial calculation](./example/polynomial.c)
+* [infix_to_postfix expression and infix calculaiton](./example/postfix.c)
+* [4-way huffman tree](./example/four_huffman_tree.c)
+* [simulated memory management](./example/memory.c)
