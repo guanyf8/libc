@@ -1,77 +1,36 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<LCRS_tree.h>
+#include<stack.h>
 #define n 100
 
 int node_data;
 
-typedef struct stack {
-	int* space;
-	int* f;
-	int* t;
-	int size;
-} stack;
-
-typedef struct elem {
-	int data;
-	struct treeNode* addr;
-} elem;
-
-typedef struct seq {
-	elem* handle;
+typedef struct array {
+	treeNode** handle;
 	int front;
 	int tail;
 	int size;
-} seq;
-
-typedef struct treeNode {
-	int data;
-	int code;
-	struct treeNode* first;
-	struct treeNode* next;
-	struct treeNode* parent;
-} treeNode;
-
-void stacInit(int* a, stack* q) {
-	q->space = a;
-	q->f = q->t = a;
-	q->t--;
-	q->size = 0;
-}
-
-void stacPush(int i, stack* q) {
-	q->t++;
-	*q->t = i;
-}
-
-int stacPop(stack* q) {
-	int temp = *q->t;
-	q->t--;
-	return temp;
-}
-
+} array;
 
 void nodeInit(treeNode* node) {
-	node->first = node->next = node->parent = NULL;
+	node->first_child = node->next = NULL;
 }
 
-
-treeNode* huffmanCreate(seq* s) {
+#define code depth
+treeNode* huffmanCreate(array* s) {
 	treeNode* root;
 	while (s->size > 1) {
 		treeNode* child, * parent, * prechild = NULL, * firstchild=NULL;
 		int j = s->front, weight = 0;
-		elem temp;
+
 		parent = (treeNode*)malloc(sizeof(treeNode));
 		nodeInit(parent);
 		while (j - s->front <= 3) {
-			if (s->handle[j].addr == NULL) {
-				child = (treeNode*)malloc(sizeof(treeNode));
-				nodeInit(child);
-			}
-			else child = s->handle[j].addr;
+			child = s->handle[j];
 			if (j - s->front == 0)firstchild = child;
-			child->data = (s->handle[j]).data;
-			child->parent = parent;
+			child->data = (s->handle[j])->data;
+			// child->parent = parent;
 			weight += child->data;
 			if (prechild != NULL)prechild->next = child;
 			prechild = child;
@@ -85,32 +44,31 @@ treeNode* huffmanCreate(seq* s) {
 		}
 		s->front += 3;
 		s->size -= 4;
-		temp.data = parent->data = weight;
-		temp.addr = parent;
-		if(firstchild)parent->first = firstchild;
+		parent->data = weight;
+		if(firstchild)parent->first_child = firstchild;
 		j = s->front;
-		while (weight > s->handle[j + 1].data && j - (s->front) < s->size) {
+		while (weight > s->handle[j + 1]->data && j - (s->front) < s->size) {
 			s->handle[j] = s->handle[j + 1];
 			j++;
 		}
-		s->handle[j] = temp;
+		s->handle[j] = parent;
 		s->size++;
 	}
-	root = s->handle[s->front].addr;
+	root = s->handle[s->front];
 	return root;
 }
 
-void huffmanCode(treeNode* node, stack* stac) {
+void huffmanCode(treeNode* node, Stack* stac) {
 	if (node) {
 		node_data = node->data;
-		stacPush(node->code, stac);
-		huffmanCode(node->first, stac);
-		stacPop(stac);
+		stackPush(stac,node->code);
+		huffmanCode(node->first_child, stac);
+		free(stackPop(stac));
 		if(node->next)huffmanCode(node->next, stac);
 	}
 	else {
 		printf("%d  ", node_data);
-		int* i = stac->f+1;
+		int* i = 0;
 		while (i <= stac->t) {
 			if (*i == 0)printf("00");
 			else if (*i == 1)printf("01");
@@ -123,22 +81,19 @@ void huffmanCode(treeNode* node, stack* stac) {
 
 
 
-void arrayInit(seq* s, elem* a) {
+void arrayInit(array* s, treeNode* a[]) {
 	int i;
 	s->handle = a;
-	for (i = 0; i < n; i++) {
-		a[i].addr = NULL;
-	}
 	s->size = 0;
 	s->front = s->tail = 0;
 }
 
-void order(seq* a) {
+void order(array* a) {
 	int size = a->size, i = 0, j;
 	for (; i < size; i++) {
 		for (j = i + 1; j < size; j++) {
-			if (a->handle[j].data < a->handle[i].data) {
-				elem temp;
+			if (a->handle[j]->data < a->handle[i]->data) {
+				btNode* temp;
 				temp = a->handle[i];
 				a->handle[i] = a->handle[j];
 				a->handle[j] = temp;
@@ -148,16 +103,16 @@ void order(seq* a) {
 }
 
 int main(void) {
-	seq s;
-	elem a[n];
-	int i = 0, b[n];
+	array s;
+	treeNode* a[n];
+	int i = 0;
 	treeNode* huffmanTree;
-	stack stac;
-	stacInit(b, &stac);
+	Stack stac;
+	stackInitStruct(&stac,n,sizeof(int));
 	arrayInit(&s, a);
 	printf("Please enter a sequence of intergers which contains 3n+1 numbers:\n");
 	printf("tips:End with an illegal character such as '*'\n");
-	while (scanf("%d", &(a[i].data))) {
+	while (scanf("%d", &((a[i]=(treeNode*)malloc(sizeof(treeNode)))->data))) {
 		s.size++;
 		s.tail++;
 		i++;
