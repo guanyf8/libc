@@ -31,5 +31,5 @@ LibC provides C implementations of data structures and typical algorithms for ge
 * [hanoi(non recursive)](./example/hanoi.c)
 * [polynomial calculation](./example/polynomial.c)
 * [infix_to_postfix expression and infix calculaiton](./example/postfix.c)
-* [4-way huffman tree](./example/four_huffman_tree.c)
+* [4-way huffman tree](./example/four_huffman.c)
 * [simulated memory management](./example/memory.c)
