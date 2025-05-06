@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include "cycularQ.h"
+#include "queue.h"
 #define n 30
 
 static void merge(int *s,Queue* q, int f1, int t1, int f2, int t2) {

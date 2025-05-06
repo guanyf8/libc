@@ -1,7 +1,7 @@
 #ifndef SORT_H
 #define SORT_H
 
-#include "cycularQ.h"
+#include "queue.h"
 #include "bin_heap.h"
 #include "basic.h"
 

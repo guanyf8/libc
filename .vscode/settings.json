@@ -2,7 +2,7 @@
     "cmake.sourceDirectory": "D:/GitHub/libc",
     "files.associations": {
         "allocator.h": "c",
-        "cycularq.h": "c",
+        "queue.h": "c",
         "string.h": "c",
         "macro.h": "c",
         "bst.h": "c",
@@ -66,6 +66,7 @@
         "stdexcept": "c",
         "streambuf": "c",
         "cstdbool": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "stdio.h": "c"
     }
 }

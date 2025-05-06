@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cycularQ.h"
+#include "queue.h"
 #include "basic.h"
 #include <math.h>
 

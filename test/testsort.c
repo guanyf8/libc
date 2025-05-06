@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include "cycularQ.h"
+#include "queue.h"
 #include "sort.h"
 #include <time.h>
 #define n 30

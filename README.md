@@ -3,7 +3,7 @@ LibC provides C implementations of data structures and typical algorithms for ge
 
 ## Data Structure
 * [Sequential Stack](./include/stack.h)
-* [Cycular Queue](./include/cycularQ.h)
+* [Cycular Queue](./include/queue.h)
 * [AVL Tree and Binary Searching Tree based on it](./include/avltree.h)
 * [Concurrent RB Tree (based on linux kernel 2.6)](./include/rbtree.h)
 * [Concurrent Map based on rb tree](./include/concurrent_map.h)

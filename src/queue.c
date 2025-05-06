@@ -1,6 +1,6 @@
 
 
-#include "cycularQ.h"
+#include "queue.h"
 
 
 Queue* QueueInitStruct(Queue* q,int cap,int step_size) {

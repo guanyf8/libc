@@ -14,7 +14,9 @@ typedef struct {
     int cap;
     int step_size;
     char* space;
-} Queue;
+} cirQueue;
+
+typedef cirQueue Queue;
 
 #define QueueInit(q,cap) QueueInitStruct(q,cap,sizeof(void*))
 
